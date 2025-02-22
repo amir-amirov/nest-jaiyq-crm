@@ -19,11 +19,11 @@ export class UpdateBookingDto {
   @IsOptional()
   phone: string;
 
-  @IsString()
   @IsIn(['reserved', 'paid', 'cancelled'], {
     message:
       'Status must be one of the following: reserved, paid, or cancelled',
   })
+  @IsOptional()
   status: 'reserved' | 'paid' | 'cancelled';
 
   @IsNumber()

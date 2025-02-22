@@ -21,7 +21,7 @@ export class createBookingDto {
   total_price: number;
 
   @IsNumber()
-  slot_id: number;
+  slotId: number;
 
   @IsNumber()
   number_of_boards: number;
