@@ -15,6 +15,7 @@ import { Booking } from './bookings/bookings.entity';
       entities: [Slot, Booking],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Slot, Booking]), // to be able to use Slot and Bookings repos in app
     SlotsModule,
     BookingsModule,
   ],

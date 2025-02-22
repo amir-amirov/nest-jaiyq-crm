@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from './bookings.entity';
 import { Repository } from 'typeorm';
@@ -14,19 +18,37 @@ export class BookingsService {
   ) {}
 
   async create(bookingDto: createBookingDto, slot: Slot) {
-    try {
-      const booking = this.repo.create(bookingDto);
-      booking.slot = slot;
-      const savedBooking = await this.repo.save(booking);
-      if (savedBooking) {
-        await this.slotsService.decreaseAvailableBoard(
-          slot.id,
-          bookingDto.number_of_boards,
-        );
-      }
-      return savedBooking;
-    } catch (error) {
-      throw new BadRequestException('Unknown error');
+    await this.slotsService.decreaseAvailableBoard(
+      slot.id,
+      bookingDto.number_of_boards,
+    );
+    const booking = this.repo.create(bookingDto);
+    booking.slot = slot;
+    return this.repo.save(booking);
+  }
+
+  findOne(id: number) {
+    return this.repo.findOneBy({ id, slot: { is_active: true } });
+  }
+
+  async find(id: number) {
+    // const slot = await this.slotsService.findOne(id);
+
+    return this.repo.find({ where: { slot: { id, is_active: true } } });
+  }
+
+  async findAll() {
+    return this.repo.find({ where: { slot: { is_active: true } } });
+  }
+
+  async update(id: number, attrs: Partial<Booking>) {
+    const booking = await this.findOne(id);
+
+    if (!booking) {
+      throw new NotFoundException('booking not found');
+    } else {
+      const newBooking = this.repo.create({ ...booking, ...attrs });
+      return this.repo.save(newBooking);
     }
   }
 }

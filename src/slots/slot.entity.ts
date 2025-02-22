@@ -22,13 +22,16 @@ export class Slot {
   @Column()
   available_boards: number;
 
+  @Column({ default: true })
+  is_active: boolean;
+
   @CreateDateColumn()
   created_at: Date; // Auto-generated creation timestamp
 
   @UpdateDateColumn()
   updated_at: Date; // Auto-generated update timestamp
 
-  @OneToMany(() => Booking, (booking) => booking.slot)
+  @OneToMany(() => Booking, (booking) => booking.slot, { cascade: true })
   bookings: Booking[];
 
   @AfterInsert()

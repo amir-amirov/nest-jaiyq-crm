@@ -1,19 +1,6 @@
-// import { Injectable } from '@nestjs/common';
-// import { createSlotDto } from './dto/create-slot.dto';
-
-// @Injectable()
-// export class SlotsService {
-//   create(body: createSlotDto) {
-//     return 'Create';
-//   }
-
-//   getByStartDate(date: string) {
-//     return 'Get';
-//   }
-// }
-
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -39,35 +26,82 @@ export class SlotsService {
     return this.repo.save(newSlot);
   }
 
+  async findOne(id: number) {
+    const slot = await this.repo.findOneBy({ id, is_active: true });
+    if (!slot) {
+      throw new NotFoundException(`slot with id ${id} not found`);
+    }
+    return slot;
+  }
+
+  async remove(id: number) {
+    const slot = await this.findOne(id);
+
+    return this.repo.remove(slot);
+  }
+
   async decreaseAvailableBoard(slotId: number, numberOfBoards: number) {
     const slot = await this.repo.findOne({ where: { id: slotId } });
     if (!slot) {
       throw new NotFoundException(`Slot with id of ${slotId} does not exist`);
     }
+    if (slot.is_active == false) {
+      throw new ForbiddenException('This slot is not active');
+    }
     if (slot.available_boards < numberOfBoards) {
-      throw new BadRequestException('Not enough boards available');
+      throw new ForbiddenException('Not enough boards available');
     }
 
     slot.available_boards -= numberOfBoards;
-    return await this.repo.save(slot);
+    return this.repo.save(slot);
+  }
+
+  async getAll() {
+    return this.repo.find({
+      where: {
+        is_active: true,
+      },
+    });
   }
 
   async getByStartDate(date: string) {
-    const slots = await this.repo.find({
+    return this.repo.find({
       where: {
         datetime: MoreThanOrEqual(date),
+        is_active: true,
       },
     });
-
-    return slots;
   }
 
   async getSlotById(slot_id: number) {
+    return this.repo.find({
+      where: {
+        id: slot_id,
+        is_active: true,
+      },
+    });
+  }
+
+  async disable(slot_id: number) {
+    const slot = await this.getSlotById(slot_id);
+    if (!slot[0]) {
+      throw new NotFoundException(`No slot with id ${slot_id} found`);
+    }
+    const newSlot = this.repo.create({ ...slot[0], is_active: false });
+    return this.repo.save(newSlot);
+  }
+
+  async enable(slot_id: number) {
     const slot = await this.repo.find({
       where: {
         id: slot_id,
       },
     });
-    return slot;
+
+    if (!slot[0]) {
+      throw new NotFoundException(`No slot with id ${slot_id} found`);
+    }
+    const newSlot = this.repo.create({ ...slot[0], is_active: true });
+    return this.repo.save(newSlot);
   }
 }

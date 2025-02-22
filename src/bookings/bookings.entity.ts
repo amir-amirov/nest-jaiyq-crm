@@ -40,7 +40,10 @@ export class Booking {
   @UpdateDateColumn()
   updated_at: Date; // Auto-generated update timestamp
 
-  @ManyToOne(() => Slot, (slot) => slot.bookings)
+  @ManyToOne(() => Slot, (slot) => slot.bookings, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   slot: Slot;
 
   @AfterInsert()
