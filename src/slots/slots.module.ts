@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { SlotsController } from './slots.controller';
 import { SlotsService } from './slots.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Slot } from './slot.entity';
+import { BookingsModule } from 'src/bookings/bookings.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Slot])],
