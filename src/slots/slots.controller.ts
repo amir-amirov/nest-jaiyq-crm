@@ -23,6 +23,7 @@ export class SlotsController {
     return this.slotsService.create(body);
   }
 
+  @UseGuards(AuthGuard)
   @Post('/bulk')
   async createBulkSlots(@Body() createSlotsBulkDto: createSlotsBulkDto) {
     const { slots } = createSlotsBulkDto;
