@@ -4,8 +4,8 @@ export class createBookingDto {
   @IsString()
   first_name: string;
 
-  @IsString()
-  last_name: string;
+  // @IsString()
+  // last_name: string;
 
   @IsPhoneNumber()
   phone: string;

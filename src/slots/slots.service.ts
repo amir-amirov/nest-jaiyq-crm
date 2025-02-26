@@ -56,6 +56,19 @@ export class SlotsService {
     return this.repo.save(slot);
   }
 
+  async increaseAvailableBoard(slotId: number, numberOfBoards: number) {
+    const slot = await this.repo.findOne({ where: { id: slotId } });
+    if (!slot) {
+      throw new NotFoundException(`Slot with id of ${slotId} does not exist`);
+    }
+    if (slot.is_active == false) {
+      throw new ForbiddenException('This slot is not active');
+    }
+
+    slot.available_boards += numberOfBoards;
+    return this.repo.save(slot);
+  }
+
   async getAll() {
     return this.repo.find({
       where: {
