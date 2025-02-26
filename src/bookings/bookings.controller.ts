@@ -44,13 +44,7 @@ export class BookingsController {
   @Post()
   @Serialize(BookingDto)
   async createBooking(@Body() body: createBookingDto) {
-    const slot = await this.slotsService.getSlotById(body.slotId);
-
-    if (slot.length > 0) {
-      return this.bookingsService.create(body, slot[0]);
-    } else {
-      throw new NotFoundException(`Slot id of ${body.slotId} does not exist`);
-    }
+    return this.bookingsService.create(body);
   }
 
   @Patch('/:id')

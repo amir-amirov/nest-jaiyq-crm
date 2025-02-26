@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './users/auth.constants';
 import { User } from './users/user.entity';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { User } from './users/user.entity';
     SlotsModule,
     BookingsModule,
     UsersModule,
+    PaymentModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

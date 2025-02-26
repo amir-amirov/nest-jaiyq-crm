@@ -20,9 +20,6 @@ export class Booking {
   first_name: string;
 
   @Column()
-  last_name: string;
-
-  @Column()
   phone: string;
 
   @Column()
