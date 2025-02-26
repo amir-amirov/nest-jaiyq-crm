@@ -104,4 +104,9 @@ export class SlotsService {
     const newSlot = this.repo.create({ ...slot[0], is_active: true });
     return this.repo.save(newSlot);
   }
+
+  createMultiple(slots: createSlotDto[]) {
+    const newSlots = slots.map((slot) => this.repo.create(slot));
+    return this.repo.save(newSlots);
+  }
 }
