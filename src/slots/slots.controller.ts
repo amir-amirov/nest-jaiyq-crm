@@ -12,17 +12,20 @@ import { SlotsService } from './slots.service';
 import { createSlotDto } from './dtos/create-slot.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { createSlotsBulkDto } from './dtos/create-slots-bulk.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('slots')
 export class SlotsController {
   constructor(private slotsService: SlotsService) {}
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post()
   createSlot(@Body() body: createSlotDto) {
     return this.slotsService.create(body);
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/bulk')
   async createBulkSlots(@Body() createSlotsBulkDto: createSlotsBulkDto) {
@@ -44,18 +47,21 @@ export class SlotsController {
     }
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete('/:id')
   deleteSlot(@Param('id') id: string) {
     return this.slotsService.remove(Number(id));
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/disable-slot/:id')
   disableSlot(@Param('id') id: string) {
     return this.slotsService.disable(Number(id));
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/enable-slot/:id')
   enableSlot(@Param('id') id: string) {

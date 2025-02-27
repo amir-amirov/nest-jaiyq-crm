@@ -1,13 +1,17 @@
 import { Expose, Transform } from 'class-transformer';
 import { Booking } from '../bookings.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BookingDto {
   @Expose()
   id: number;
+
   @Expose()
   first_name: string;
+
   @Expose()
   phone: string;
+
   @Expose()
   status: 'reserved' | 'paid' | 'cancelled';
   @Expose()

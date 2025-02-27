@@ -15,6 +15,7 @@ import { UpdateBookingDto } from './dtos/update-booking.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { BookingDto } from './dtos/booking.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('/bookings')
 export class BookingsController {
@@ -23,12 +24,16 @@ export class BookingsController {
     private slotsService: SlotsService,
   ) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('/slots/:id')
   async getBookingsBySlotId(@Param('id') id: string) {
     const slots = await this.bookingsService.find(Number(id));
     return slots;
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get()
   @Serialize(BookingDto)
   getBookings() {
@@ -36,17 +41,22 @@ export class BookingsController {
   }
 
   @Get('/:id')
+  @UseGuards(AuthGuard)
   @Serialize(BookingDto)
   async getBooking(@Param('id') id: string) {
     return await this.bookingsService.findOne(Number(id));
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post()
   @Serialize(BookingDto)
   async createBooking(@Body() body: createBookingDto) {
     return this.bookingsService.create(body);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   @Serialize(BookingDto)
   async updateUser(@Param('id') id: string, @Body() body: UpdateBookingDto) {
