@@ -24,6 +24,14 @@ async function bootstrap() {
     .setDescription('The Jaiyq CRM API description')
     .setVersion('1.0')
     .addTag('Саламалейкум Джиги')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT', // This specifies the JWT token format
+      },
+      'JWT', // The security name used for this scheme
+    )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, documentFactory);

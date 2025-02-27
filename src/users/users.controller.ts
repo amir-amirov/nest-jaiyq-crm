@@ -18,6 +18,7 @@ import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { loginUserDto } from './dtos/login-user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('/auth')
 @Serialize(UserDto)
@@ -27,7 +28,8 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  //   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post('/signup')
   async createUser(@Body() body: createUserDto) {
     const result = await this.authService.signup(body);
@@ -40,6 +42,7 @@ export class UsersController {
     return result;
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('users/:id')
   async findUser(@Param('id') id: string) {
@@ -51,12 +54,14 @@ export class UsersController {
     }
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('users/')
   findAllUsers(@Query('username') username: string) {
     return this.usersService.find(username);
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Patch('users/:id')
   async updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
@@ -64,6 +69,7 @@ export class UsersController {
     return response;
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete('users/:id')
   async deleteUser(@Param('id') id: string) {
