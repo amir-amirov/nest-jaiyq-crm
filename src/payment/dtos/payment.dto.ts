@@ -29,14 +29,14 @@ export class paymentDto {
   })
   @IsNumber()
   @IsPositive()
-  number_of_boards: number;
+  quantity: number;
 
   @ApiProperty({
     description: 'Slot ID to pay for',
     example: 2,
   })
   @IsNumber()
-  slotId: number;
+  slot_id: number;
 
   @ApiProperty({
     description: 'Card number',
@@ -53,7 +53,7 @@ export class paymentDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Length(5, 5)
+  @Length(7, 7)
   expiryDate: string;
 
   @ApiProperty({

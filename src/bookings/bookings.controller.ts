@@ -23,13 +23,11 @@ import { docs } from 'src/docs';
 @ApiResponse({ status: 401, description: 'Unauthorized' })
 @ApiResponse({ status: 500, description: 'Server Error' })
 export class BookingsController {
-  constructor(
-    private bookingsService: BookingsService,
-    private slotsService: SlotsService,
-  ) {}
+  constructor(private bookingsService: BookingsService) {}
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Serialize(BookingDto)
   @Get('/slots/:id')
   @ApiResponse(docs.getBookingsBySlotID)
   async getBookingsBySlotId(@Param('id') id: string) {
@@ -47,15 +45,15 @@ export class BookingsController {
   }
 
   @Get('/:id')
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Serialize(BookingDto)
   @ApiResponse(docs.getBookingsByID)
   async getBooking(@Param('id') id: string) {
     return await this.bookingsService.findOne(Number(id));
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard)
   @Post()
   @Serialize(BookingDto)
   @ApiResponse(docs.createBookingResponse)
@@ -63,8 +61,8 @@ export class BookingsController {
     return this.bookingsService.create(body);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard)
   @Patch('/:id')
   @Serialize(BookingDto)
   @ApiResponse(docs.getBookingsByID)

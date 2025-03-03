@@ -12,8 +12,14 @@ export class PaymentController {
 
   @Get('/get-price')
   @ApiResponse(docs.getPriceResponse)
-  getPrice(@Query('number_of_boards') number_of_boards: string) {
-    return this.paymentService.calculatePrice(Number(number_of_boards));
+  getPrice(
+    @Query('slot_id') slot_id: string,
+    @Query('quantity') quantity: string,
+  ) {
+    return this.paymentService.calculatePrice(
+      Number(slot_id),
+      Number(quantity),
+    );
   }
 
   @Post('/payment')

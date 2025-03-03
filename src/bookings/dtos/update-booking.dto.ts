@@ -44,5 +44,5 @@ export class UpdateBookingDto {
   })
   @IsNumber()
   @IsOptional()
-  number_of_boards: number;
+  quantity: number;
 }

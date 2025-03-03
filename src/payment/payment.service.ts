@@ -1,21 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { paymentDto } from './dtos/payment.dto';
 import { BookingsService } from 'src/bookings/bookings.service';
+import { SlotsService } from 'src/slots/slots.service';
 
 @Injectable()
 export class PaymentService {
-  constructor(private bookingsService: BookingsService) {}
-  calculatePrice(number_of_boards: number) {
-    return number_of_boards * 5000;
+  constructor(
+    private bookingsService: BookingsService,
+    private slotsService: SlotsService,
+  ) {}
+  async calculatePrice(slot_id: number, quantity: number) {
+    const slot = await this.slotsService.findOne(slot_id);
+    const pricePerHour = await this.slotsService.getPriceOfRental(slot_id);
+
+    const startDate = new Date(slot.start_datetime);
+    const endDate = new Date(slot.end_datetime);
+    const timeDifferenceMs = endDate.getTime() - startDate.getTime();
+    const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60);
+    const totalPrice = timeDifferenceHours * pricePerHour * quantity;
+
+    return Math.floor(totalPrice);
   }
 
   async makePayment(body: paymentDto) {
-    const total_price = this.calculatePrice(body.number_of_boards);
+    const total_price = await this.calculatePrice(body.slot_id, body.quantity);
     const booking = await this.bookingsService.create({
       first_name: body.first_name,
       phone: body.phone,
-      number_of_boards: body.number_of_boards,
-      slotId: body.slotId,
+      quantity: body.quantity,
+      slot_id: body.slot_id,
       total_price,
       status: 'reserved',
     });

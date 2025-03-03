@@ -1,3 +1,4 @@
+import { Booking } from 'src/bookings/bookings.entity';
 import { Slot } from 'src/slots/slot.entity';
 import {
   AfterInsert,
@@ -8,28 +9,19 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
-export class Booking {
+export class Rental {
   @PrimaryGeneratedColumn()
   id: number; // Auto-generated id
 
   @Column()
-  first_name: string;
+  title: string;
 
   @Column()
-  phone: string;
-
-  @Column()
-  status: 'reserved' | 'paid' | 'cancelled';
-
-  @Column()
-  total_price: number;
-
-  @Column()
-  quantity: number;
+  price: number;
 
   @CreateDateColumn()
   created_at: Date; // Auto-generated creation timestamp
@@ -37,23 +29,19 @@ export class Booking {
   @UpdateDateColumn()
   updated_at: Date; // Auto-generated update timestamp
 
-  @ManyToOne(() => Slot, (slot) => slot.bookings, {
-    eager: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  slot: Slot;
+  @OneToMany(() => Slot, (slot) => slot.rental, { cascade: true })
+  slots: Slot[];
 
   @AfterInsert()
   logInsert() {
-    console.log('Inserted Booking with id', this.id);
+    console.log('Inserted Rental with id', this.id);
   }
   @AfterRemove()
   logRemove() {
-    console.log('Removed Booking with id', this.id);
+    console.log('Removed Rental with id', this.id);
   }
   @AfterUpdate()
   logUpdate() {
-    console.log('Updated Booking with id', this.id);
+    console.log('Updated Rental with id', this.id);
   }
 }
