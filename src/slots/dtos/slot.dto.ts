@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 export class SlotDto {
   @ApiProperty({
@@ -14,14 +14,29 @@ export class SlotDto {
     example: '2025-03-01T09:00:00.000Z',
   })
   @Expose()
-  datetime: string;
+  start_datetime: string;
+
+  @ApiProperty({
+    description: 'Date and time in ISO format',
+    example: '2025-03-01T09:10:00.000Z',
+  })
+  @Expose()
+  end_datetime: string;
 
   @ApiProperty({
     description: 'Number of boards',
     example: 25,
   })
   @Expose()
-  available_boards: number;
+  available_quantity: number;
+
+  @ApiProperty({
+    description: 'ID of the rental item',
+    example: 2,
+  })
+  @Transform(({ obj }) => obj.rental.id)
+  @Expose()
+  rental_id: number;
 
   @ApiProperty({
     description: 'State of the slot: active or not',

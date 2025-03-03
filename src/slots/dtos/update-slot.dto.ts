@@ -8,7 +8,15 @@ export class UpdateSlotDto {
   })
   @IsISO8601()
   @IsOptional()
-  datetime: string;
+  start_datetime: string;
+
+  @ApiProperty({
+    description: 'Date and time of the slot in ISO format',
+    example: '2025-03-01T10:00:00.000Z',
+  })
+  @IsISO8601()
+  @IsOptional()
+  end_datetime: string;
 
   @ApiProperty({
     description: 'Number of available boards for the slot',
@@ -16,7 +24,7 @@ export class UpdateSlotDto {
   })
   @IsNumber()
   @IsOptional()
-  available_boards: number;
+  available_quantity: number;
 
   @ApiProperty({
     description: 'Boolean to indicate if the slot is active',

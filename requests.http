@@ -1,0 +1,163 @@
+### Create Rental
+POST http://localhost:3000/rentals
+Content-Type: application/json
+
+{
+    "title": "subboard",
+    "price": 4000
+}
+
+### Get Rental
+
+GET http://localhost:3000/rentals/2
+Content-Type: application/json
+
+### Get ALL Rentals
+
+GET http://localhost:3000/rentals/
+Content-Type: application/json
+
+### Patch Rental with id
+
+PATCH  http://localhost:3000/rentals/2
+Content-Type: application/json
+
+{
+    "price": 4000
+}
+
+### Delete Rental with id
+
+DELETE  http://localhost:3000/rentals/2
+Content-Type: application/json
+
+
+### Create Slot
+POST http://localhost:3000/slots
+Content-Type: application/json
+
+{
+    "start_datetime": "2025-03-01T09:01:00.000Z",
+    "end_datetime": "2025-03-01T09:10:00.000Z",
+      "available_quantity": 20,
+    "rental_id": 1
+}
+
+### Create Slots Bulk
+POST http://localhost:3000/slots/bulk
+Content-Type: application/json
+
+{
+  "slots": [
+    {
+    "start_datetime": "2025-03-01T09:01:00.000Z",
+    "end_datetime": "2025-03-01T09:10:00.000Z",
+      "available_quantity": 20,
+    "rental_id": 1
+    },
+    {
+    "start_datetime": "2025-03-01T09:01:00.000Z",
+    "end_datetime": "2025-03-01T09:10:00.000Z",
+      "available_quantity": 20,
+    "rental_id": 1
+    },
+    {
+    "start_datetime": "2025-03-01T09:01:00.000Z",
+    "end_datetime": "2025-03-01T09:10:00.000Z",
+      "available_quantity": 20,
+    "rental_id": 1
+    }
+  ]
+}
+
+### Get All Slots
+GET http://localhost:3000/slots
+Content-Type: application/json
+
+
+### Get Slots using start_date Query
+GET http://localhost:3000/slots?start_date=2025-03-01T09:30:00.000Z
+Content-Type: application/json
+
+### Delete Slot
+Delete http://localhost:3000/slots/4
+Content-Type: application/json
+
+
+### Update Slot
+Patch http://localhost:3000/slots/5
+Content-Type: application/json
+
+{
+    "start_datetime": "2025-03-01T12:30:00.000Z",
+    "end_datetime": "2025-03-01T13:00:00.000Z",
+    "available_quantity": 20,
+    "rental_id": 1
+}
+
+### Create Booking
+POST http://localhost:3000/bookings
+Content-Type: application/json
+
+{
+    "first_name": "John",
+    "phone": "+77074304349",
+    "status": "reserved",
+    "total_price": 3500,
+    "slot_id": 1,
+    "quantity": 5
+}
+
+### Get Bookings
+GET  http://localhost:3000/bookings/
+Content-Type: application/json
+
+
+### Get Booking by booking id
+GET  http://localhost:3000/bookings/1
+Content-Type: application/json
+
+{
+    "first_name": "John",
+    "phone": "+77074304349",
+    "status": "reserved",
+    "total_price": 3500,
+    "slot_id": 1,
+    "quantity": 5
+}
+
+
+### Update Booking by booking id
+PATCH http://localhost:3000/bookings/1
+Content-Type: application/json
+
+{
+    "quantity": 7
+}
+
+
+### Calculate price
+GET http://localhost:3000/get-price?slot_id=5&quantity=3
+Content-Type: application/json
+
+{
+    "quantity": 7
+}
+
+### Make payment
+POST http://localhost:3000/payment
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "phone": "+77074304349",
+  "quantity": 25,
+  "slot_id": 5,
+  "cardNumber": "5123456789012345",
+  "expiryDate": "2025-03",
+  "cvv": "633",
+  "cardHolderName": "John Doe"
+}
+
+
+

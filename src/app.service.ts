@@ -29,7 +29,9 @@ export class AppService {
     const bookedUsers = await this.bookingsService.find(id);
 
     console.log('Booked users: ', bookedUsers);
-    if (bookedUsers.length > 0 && attrs.datetime) {
+
+    // IMPORTANT RECHECK THIS!
+    if (bookedUsers.length > 0 && attrs.start_datetime) {
       throw new ForbiddenException(
         "There are users who already booked the slot. Can not update datetime, use '/slots/disable-slot/:id' instead...",
       );
