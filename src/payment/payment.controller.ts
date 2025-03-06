@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { paymentDto } from './dtos/payment.dto';
 import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
@@ -11,7 +11,7 @@ import { getPriceDto } from './dtos/get-price.dto';
 export class PaymentController {
   constructor(private paymentService: PaymentService) {}
 
-  @Get('/get-price')
+  @Post('/get-price')
   @ApiResponse(docs.getPriceResponse)
   getPrice(@Body() body: getPriceDto) {
     return this.paymentService.calculatePrice(body.slot_ids, body.quantity);
