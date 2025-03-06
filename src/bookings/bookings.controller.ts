@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { createBookingDto } from './dtos/create-booking.dto';
-import { SlotsService } from 'src/slots/slots.service';
 import { UpdateBookingDto } from './dtos/update-booking.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { BookingDto } from './dtos/booking.dto';
@@ -45,15 +44,15 @@ export class BookingsController {
   }
 
   @Get('/:id')
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Serialize(BookingDto)
   @ApiResponse(docs.getBookingsByID)
   async getBooking(@Param('id') id: string) {
     return await this.bookingsService.findOne(Number(id));
   }
 
-  // @ApiBearerAuth()
-  // @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post()
   @Serialize(BookingDto)
   @ApiResponse(docs.createBookingResponse)
@@ -61,8 +60,8 @@ export class BookingsController {
     return this.bookingsService.create(body);
   }
 
-  // @ApiBearerAuth()
-  // @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   @Serialize(BookingDto)
   @ApiResponse(docs.getBookingsByID)

@@ -73,4 +73,19 @@ export class BookingsService {
       return this.repo.save(booking);
     }
   }
+
+  async deleteBooking(id: number) {
+    const booking = await this.findOne(id);
+
+    if (!booking) {
+      // throw new NotFoundException('booking not found')
+      console.log(
+        `Cannot delete bookings because no booking with id ${id} found`,
+      );
+    } else {
+      const slot = await this.slotsService.findOne(booking.slot.id);
+      await this.slotsService.increaseAvailableBoard(slot.id, booking.quantity);
+      return this.repo.remove(booking);
+    }
+  }
 }
