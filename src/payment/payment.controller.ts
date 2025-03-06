@@ -3,6 +3,7 @@ import { PaymentService } from './payment.service';
 import { paymentDto } from './dtos/payment.dto';
 import { ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 import { docs } from 'src/docs';
+import { getPriceDto } from './dtos/get-price.dto';
 
 @Controller()
 @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -12,8 +13,8 @@ export class PaymentController {
 
   @Get('/get-price')
   @ApiResponse(docs.getPriceResponse)
-  getPrice(@Query('number_of_boards') number_of_boards: string) {
-    return this.paymentService.calculatePrice(Number(number_of_boards));
+  getPrice(@Body() body: getPriceDto) {
+    return this.paymentService.calculatePrice(body.slot_ids, body.quantity);
   }
 
   @Post('/payment')

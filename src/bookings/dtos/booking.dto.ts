@@ -1,6 +1,4 @@
 import { Expose, Transform } from 'class-transformer';
-import { Booking } from '../bookings.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class BookingDto {
   @Expose()
@@ -17,12 +15,12 @@ export class BookingDto {
   @Expose()
   total_price: number;
   @Expose()
-  number_of_boards: number;
+  quantity: number;
   @Expose()
   created_at: Date;
   @Expose()
   updated_at: Date;
   @Transform(({ obj }) => obj.slot.id)
   @Expose()
-  slotId: number;
+  slot_id: number;
 }

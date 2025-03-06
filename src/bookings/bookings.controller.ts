@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { createBookingDto } from './dtos/create-booking.dto';
-import { SlotsService } from 'src/slots/slots.service';
 import { UpdateBookingDto } from './dtos/update-booking.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { BookingDto } from './dtos/booking.dto';
@@ -23,13 +22,11 @@ import { docs } from 'src/docs';
 @ApiResponse({ status: 401, description: 'Unauthorized' })
 @ApiResponse({ status: 500, description: 'Server Error' })
 export class BookingsController {
-  constructor(
-    private bookingsService: BookingsService,
-    private slotsService: SlotsService,
-  ) {}
+  constructor(private bookingsService: BookingsService) {}
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Serialize(BookingDto)
   @Get('/slots/:id')
   @ApiResponse(docs.getBookingsBySlotID)
   async getBookingsBySlotId(@Param('id') id: string) {

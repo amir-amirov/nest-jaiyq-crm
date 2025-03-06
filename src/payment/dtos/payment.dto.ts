@@ -1,5 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayMinSize,
+  ArrayNotEmpty,
+  IsArray,
   IsNotEmpty,
   IsNumber,
   IsPhoneNumber,
@@ -29,14 +32,17 @@ export class paymentDto {
   })
   @IsNumber()
   @IsPositive()
-  number_of_boards: number;
+  quantity: number;
 
   @ApiProperty({
-    description: 'Slot ID to pay for',
-    example: 2,
+    description: 'Array of slot IDs to pay for',
+    example: [2, 3, 5],
   })
-  @IsNumber()
-  slotId: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  slot_ids: number[];
 
   @ApiProperty({
     description: 'Card number',
@@ -53,7 +59,7 @@ export class paymentDto {
   })
   @IsNotEmpty()
   @IsString()
-  @Length(5, 5)
+  @Length(7, 7)
   expiryDate: string;
 
   @ApiProperty({

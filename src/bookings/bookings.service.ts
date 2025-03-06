@@ -17,17 +17,17 @@ export class BookingsService {
   ) {}
 
   async create(bookingDto: createBookingDto) {
-    const [slot] = await this.slotsService.getSlotById(bookingDto.slotId);
+    const [slot] = await this.slotsService.getSlotById(bookingDto.slot_id);
 
     if (!slot) {
       throw new NotFoundException(
-        `Slot id of ${bookingDto.slotId} does not exist`,
+        `Slot id of ${bookingDto.slot_id} does not exist`,
       );
     }
 
-    await this.slotsService.decreaseAvailableBoard(
+    await this.slotsService.decreaseAvailableQuantity(
       slot.id,
-      bookingDto.number_of_boards,
+      bookingDto.quantity,
     );
     const booking = this.repo.create(bookingDto);
     booking.slot = slot;
@@ -48,6 +48,7 @@ export class BookingsService {
     return this.repo.find({ where: { slot: { is_active: true } } });
   }
 
+  // TODO: Add checking if increasing of boards will be available
   async update(id: number, attrs: Partial<Booking>) {
     const booking = await this.findOne(id);
 
@@ -66,13 +67,25 @@ export class BookingsService {
       throw new NotFoundException('booking not found');
     } else {
       const slot = await this.slotsService.findOne(booking.slot.id);
-      await this.slotsService.increaseAvailableBoard(
-        slot.id,
-        booking.number_of_boards,
-      );
+      await this.slotsService.increaseAvailableBoard(slot.id, booking.quantity);
 
       booking.status = 'cancelled';
       return this.repo.save(booking);
+    }
+  }
+
+  async deleteBooking(id: number) {
+    const booking = await this.findOne(id);
+
+    if (!booking) {
+      // throw new NotFoundException('booking not found')
+      console.log(
+        `Cannot delete bookings because no booking with id ${id} found`,
+      );
+    } else {
+      const slot = await this.slotsService.findOne(booking.slot.id);
+      await this.slotsService.increaseAvailableBoard(slot.id, booking.quantity);
+      return this.repo.remove(booking);
     }
   }
 }

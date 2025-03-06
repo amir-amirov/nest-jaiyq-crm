@@ -8,6 +8,8 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { docs } from './docs';
+import { Serialize } from './interceptors/serialize.interceptor';
+import { SlotDto } from './slots/dtos/slot.dto';
 
 @Controller()
 export class AppController {
@@ -21,6 +23,7 @@ export class AppController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Serialize(SlotDto)
   @Patch('/slots/:id')
   @ApiResponse(docs.patchSlotResponse)
   async updateUser(@Param('id') id: string, @Body() body: UpdateSlotDto) {

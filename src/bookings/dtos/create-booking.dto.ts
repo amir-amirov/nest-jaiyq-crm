@@ -37,11 +37,11 @@ export class createBookingDto {
     example: 1,
   })
   @IsNumber()
-  slotId: number;
+  slot_id: number;
 
   @ApiProperty({
     example: 3,
   })
   @IsNumber()
-  number_of_boards: number;
+  quantity: number;
 }

@@ -11,16 +11,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './users/auth.constants';
 import { User } from './users/user.entity';
 import { PaymentModule } from './payment/payment.module';
+import { RentalsModule } from './rentals/rentals.module';
+import { Rental } from './rentals/rental.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [User, Slot, Booking],
+      entities: [User, Slot, Booking, Rental],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Slot, Booking]), // to be able to use User, Slot and Bookings repos in app
+    TypeOrmModule.forFeature([User, Slot, Booking, Rental]), // to be able to use User, Slot and Bookings repos in app
     UsersModule,
     SlotsModule,
     BookingsModule,
@@ -31,6 +33,7 @@ import { PaymentModule } from './payment/payment.module';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '365d' },
     }),
+    RentalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
