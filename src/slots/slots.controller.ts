@@ -22,6 +22,7 @@ import { getSlotsDto } from './dtos/get-slots.dto';
 import { SlotDto } from './dtos/slot.dto';
 import { docs } from 'src/docs';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { BulkSlotsDto } from './dtos/bulk-slots.dto';
 
 @Controller('slots')
 @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -42,6 +43,7 @@ export class SlotsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/bulk')
+  @Serialize(BulkSlotsDto)
   @ApiCreatedResponse(docs.createSlotsBulkResponse)
   async createBulkSlots(@Body() createSlotsBulkDto: createSlotsBulkDto) {
     const { slots } = createSlotsBulkDto;
