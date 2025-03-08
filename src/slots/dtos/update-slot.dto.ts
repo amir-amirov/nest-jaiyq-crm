@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsNumber, IsISO8601, IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateSlotDto {
@@ -7,16 +8,18 @@ export class UpdateSlotDto {
     example: '2025-03-01T09:00:00.000Z',
   })
   @IsISO8601()
+  @Type(() => Date)
   @IsOptional()
-  start_datetime: string;
+  start_datetime: Date;
 
   @ApiProperty({
     description: 'Date and time of the slot in ISO format',
     example: '2025-03-01T10:00:00.000Z',
   })
   @IsISO8601()
+  @Type(() => Date)
   @IsOptional()
-  end_datetime: string;
+  end_datetime: Date;
 
   @ApiProperty({
     description: 'Number of available boards for the slot',

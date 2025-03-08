@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsISO8601, IsNumber, IsPositive } from 'class-validator';
 import { IsAfter } from 'src/decorators/is-after.decorator';
 
@@ -8,17 +9,19 @@ export class createSlotDto {
     example: '2025-03-01T09:00:00.000Z',
   })
   @IsISO8601()
-  start_datetime: string;
+  @Type(() => Date)
+  start_datetime: Date;
 
   @ApiProperty({
     description: 'Date and time of the slot in ISO format',
     example: '2025-03-01T09:30:00.000Z',
   })
-  @IsISO8601()
   @IsAfter('start_datetime', {
     message: 'end_datetime must be after start_datetime',
   })
-  end_datetime: string;
+  @IsISO8601()
+  @Type(() => Date)
+  end_datetime: Date;
 
   @ApiProperty({
     description: 'Number of available boards for the slot',

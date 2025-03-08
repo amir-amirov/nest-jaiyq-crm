@@ -14,6 +14,7 @@ export class SlotDto {
     example: '2025-03-01T09:00:00.000Z',
   })
   @Expose()
+  @Transform(({ value }) => value.toISOString())
   start_datetime: string;
 
   @ApiProperty({
@@ -21,6 +22,7 @@ export class SlotDto {
     example: '2025-03-01T09:10:00.000Z',
   })
   @Expose()
+  @Transform(({ value }) => value.toISOString())
   end_datetime: string;
 
   @ApiProperty({

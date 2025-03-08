@@ -46,7 +46,7 @@ export class SlotsService {
     }
   }
 
-  async DoesSlotExist(start_datetime: string, rental_id: number) {
+  async DoesSlotExist(start_datetime: Date, rental_id: number) {
     const slot = await this.repo.findOne({
       where: {
         start_datetime: new Date(start_datetime),
@@ -216,8 +216,8 @@ export class SlotsService {
   }
 
   async isSlotValid(
-    start_datetime: string,
-    end_datetime: string,
+    start_datetime: Date,
+    end_datetime: Date,
     rental_id: number,
   ) {
     const overlappingSlot = await this.repo.findOne({

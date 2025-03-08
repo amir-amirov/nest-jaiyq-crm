@@ -18,11 +18,11 @@ export class Slot {
   @PrimaryGeneratedColumn()
   id: number; // Auto-generated id
 
-  @Column('datetime')
-  start_datetime: string; // Time for the slot
+  @Column({ type: 'timestamp' })
+  start_datetime: Date; // Time for the slot
 
-  @Column('datetime')
-  end_datetime: string; // Time for the slot
+  @Column({ type: 'timestamp' })
+  end_datetime: Date; // Time for the slot
 
   @Column()
   available_quantity: number;
