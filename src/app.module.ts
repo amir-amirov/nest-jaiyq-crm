@@ -17,8 +17,8 @@ import { Rental } from './rentals/rental.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
       entities: [User, Slot, Booking, Rental],
       synchronize: true,
     }),
