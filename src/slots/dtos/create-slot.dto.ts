@@ -9,8 +9,7 @@ export class createSlotDto {
     example: '2025-03-01T09:00:00.000Z',
   })
   @IsISO8601()
-  @Type(() => Date)
-  start_datetime: Date;
+  start_datetime: string;
 
   @ApiProperty({
     description: 'Date and time of the slot in ISO format',
@@ -20,8 +19,7 @@ export class createSlotDto {
     message: 'end_datetime must be after start_datetime',
   })
   @IsISO8601()
-  @Type(() => Date)
-  end_datetime: Date;
+  end_datetime: string;
 
   @ApiProperty({
     description: 'Number of available boards for the slot',
