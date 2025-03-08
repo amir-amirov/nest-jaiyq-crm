@@ -13,9 +13,13 @@ import { User } from './users/user.entity';
 import { PaymentModule } from './payment/payment.module';
 import { RentalsModule } from './rentals/rentals.module';
 import { Rental } from './rentals/rental.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes config available everywhere
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
