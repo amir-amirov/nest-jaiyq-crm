@@ -28,7 +28,11 @@ export class SlotsService {
       slotDto.rental_id,
     );
     const rental = await this.rentalsService.findOneRental(slotDto.rental_id);
-    const newSlot = this.repo.create(slotDto);
+    const newSlot = this.repo.create({
+      ...slotDto,
+      start_datetime: new Date(slotDto.start_datetime),
+      end_datetime: new Date(slotDto.end_datetime),
+    });
     newSlot.rental = rental;
     return this.repo.save(newSlot);
   }
