@@ -24,13 +24,13 @@ import { docs } from 'src/docs';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 
 @Controller('slots')
-@Serialize(SlotDto)
 @ApiResponse({ status: 400, description: 'Bad Request' })
 @ApiResponse({ status: 401, description: 'Unauthorized' })
 @ApiResponse({ status: 500, description: 'Server Error' })
 export class SlotsController {
   constructor(private slotsService: SlotsService) {}
 
+  @Serialize(SlotDto)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post()
@@ -53,6 +53,7 @@ export class SlotsController {
     };
   }
 
+  @Serialize(SlotDto)
   @Get()
   @ApiQuery(docs.getSlotsRequest)
   @ApiResponse(docs.getSlotsResponse)
@@ -64,6 +65,7 @@ export class SlotsController {
     }
   }
 
+  @Serialize(SlotDto)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Delete('/:id')
@@ -72,6 +74,7 @@ export class SlotsController {
     return this.slotsService.remove(Number(id));
   }
 
+  @Serialize(SlotDto)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/disable-slot/:id')
@@ -80,6 +83,7 @@ export class SlotsController {
     return this.slotsService.disable(Number(id));
   }
 
+  @Serialize(SlotDto)
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('/enable-slot/:id')

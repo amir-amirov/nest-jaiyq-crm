@@ -49,6 +49,8 @@ export class Slot {
   @AfterInsert()
   logInsert() {
     console.log('Inserted Slot with id', this.id);
+    console.log('Inserted Slot with START_TIME', this.start_datetime);
+    console.log('Inserted Slot with END_TIME', this.end_datetime);
   }
   @AfterRemove()
   logRemove() {
