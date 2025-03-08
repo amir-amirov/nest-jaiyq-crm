@@ -33,7 +33,10 @@ export class SlotsService {
   // Helper function
   async findOneSlot(start_datetime: string, rental_id: number) {
     const slot = await this.repo.findOne({
-      where: { start_datetime, rental: { id: rental_id } },
+      where: {
+        start_datetime: new Date(start_datetime),
+        rental: { id: rental_id },
+      },
     });
 
     if (!slot) {
@@ -45,7 +48,10 @@ export class SlotsService {
 
   async DoesSlotExist(start_datetime: string, rental_id: number) {
     const slot = await this.repo.findOne({
-      where: { start_datetime, rental: { id: rental_id } },
+      where: {
+        start_datetime: new Date(start_datetime),
+        rental: { id: rental_id },
+      },
     });
 
     if (slot) {
@@ -127,7 +133,7 @@ export class SlotsService {
   async getByStartDate(date: string) {
     return this.repo.find({
       where: {
-        start_datetime: MoreThanOrEqual(date),
+        start_datetime: MoreThanOrEqual(new Date(date)),
         is_active: true,
       },
     });
@@ -218,8 +224,8 @@ export class SlotsService {
       where: [
         {
           rental: { id: rental_id },
-          start_datetime: LessThan(end_datetime),
-          end_datetime: MoreThan(start_datetime),
+          start_datetime: LessThan(new Date(end_datetime)),
+          end_datetime: MoreThan(new Date(start_datetime)),
         },
       ],
     });
