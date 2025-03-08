@@ -19,11 +19,14 @@ export class SlotsService {
 
   async create(slotDto: createSlotDto) {
     await this.isSlotValid(
-      slotDto.start_datetime,
-      slotDto.end_datetime,
+      new Date(slotDto.start_datetime),
+      new Date(slotDto.end_datetime),
       slotDto.rental_id,
     );
-    await this.DoesSlotExist(slotDto.start_datetime, slotDto.rental_id);
+    await this.DoesSlotExist(
+      new Date(slotDto.start_datetime),
+      slotDto.rental_id,
+    );
     const rental = await this.rentalsService.findOneRental(slotDto.rental_id);
     const newSlot = this.repo.create(slotDto);
     newSlot.rental = rental;
@@ -178,8 +181,8 @@ export class SlotsService {
     await Promise.all(
       slots.map((slot) =>
         this.isSlotValid(
-          slot.start_datetime,
-          slot.end_datetime,
+          new Date(slot.start_datetime),
+          new Date(slot.end_datetime),
           slot.rental_id,
         ),
       ),
