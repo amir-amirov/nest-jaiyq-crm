@@ -18,16 +18,21 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Connect and pull
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            sudo -i
-            cd ${{ secrets.WORK_DIR }}
-            git checkout ${{ secrets.MAIN_BRANCH }}
-            git pull origin ${{ secrets.MAIN_BRANCH }}
-            yarn build
-            pm2 restart nest-jaiyq-crm
-          EOF
+- name: Connect and pull
+  run: |
+    ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+      sudo bash -c '
+        if [ ! -d "${{ secrets.WORK_DIR }}" ]; then
+          git clone git@github.com:your-username/your-repo.git ${{ secrets.WORK_DIR }}
+        fi
+        cd ${{ secrets.WORK_DIR }}
+        git checkout ${{ secrets.MAIN_BRANCH }}
+        git pull origin ${{ secrets.MAIN_BRANCH }}
+        export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+        yarn install --production
+        pm2 restart nest-jaiyq-crm || pm2 start dist/main.js --name nest-jaiyq-crm
+      '
+    EOF
 
       - name: Cleanup
         run: rm -rf ~/.ssh
