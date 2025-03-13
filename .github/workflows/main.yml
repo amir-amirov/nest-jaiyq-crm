@@ -17,6 +17,6 @@ jobs:
           echo "${{ secrets.SSH_PPRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
       - name: connect and pull
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && yarn build && pm2 restart nest-jaiyq-crm"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo -i && cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && yarn build && pm2 restart nest-jaiyq-crm"
       - name: cleanup
         run: rm -rf ~/.ssh
