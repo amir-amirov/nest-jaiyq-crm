@@ -3,36 +3,44 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - feat/f1-payment
+      - feat/f1-payment # Change this to your feature branch or main branch
 
 jobs:
-  run_pull:
-    name: run pull
+  deploy:
+    name: Deploy Application
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install SSH keys
+      - name: Install SSH Keys
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-- name: Connect and pull
-  run: |
-    ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-      sudo bash -c '
-        if [ ! -d "${{ secrets.WORK_DIR }}" ]; then
-          git clone git@github.com:your-username/your-repo.git ${{ secrets.WORK_DIR }}
-        fi
-        cd ${{ secrets.WORK_DIR }}
-        git checkout ${{ secrets.MAIN_BRANCH }}
-        git pull origin ${{ secrets.MAIN_BRANCH }}
-        export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-        yarn install --production
-        pm2 restart nest-jaiyq-crm || pm2 start dist/main.js --name nest-jaiyq-crm
-      '
-    EOF
+      - name: Connect and Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            sudo bash -c '
+              # Ensure repository exists, otherwise clone it
+              if [ ! -d "${{ secrets.WORK_DIR }}" ]; then
+                git clone git@github.com:your-username/your-repo.git ${{ secrets.WORK_DIR }}
+              fi
+              
+              cd ${{ secrets.WORK_DIR }}
 
-      - name: Cleanup
+              # Ensure correct branch
+              git checkout ${{ secrets.MAIN_BRANCH }}
+              git pull origin ${{ secrets.MAIN_BRANCH }}
+
+              # Install dependencies and build
+              yarn install --production
+              yarn build
+
+              # Restart PM2 process
+              pm2 restart nest-jaiyq-crm || pm2 start dist/main.js --name nest-jaiyq-crm
+            '
+          EOF
+
+      - name: Cleanup SSH Keys
         run: rm -rf ~/.ssh
