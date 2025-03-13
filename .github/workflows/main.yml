@@ -21,6 +21,7 @@ jobs:
       - name: Connect and pull
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            sudo -i
             cd ${{ secrets.WORK_DIR }}
             git checkout ${{ secrets.MAIN_BRANCH }}
             git pull origin ${{ secrets.MAIN_BRANCH }}
