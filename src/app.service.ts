@@ -17,7 +17,7 @@ export class AppService {
     private slotsService: SlotsService,
   ) {}
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World!!';
   }
 
   // I couldn't place this function in SlotService because of circular dependency issue.
