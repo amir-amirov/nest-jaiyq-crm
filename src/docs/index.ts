@@ -10,6 +10,13 @@ export const docs = {
     required: true,
     example: '2025-02-27T09:00:00.000Z',
   },
+  getSlotsOneDayRequest: {
+    name: 'date',
+    type: String,
+    description: 'The date should be in ISO string format or simply 2025-02-27',
+    required: true,
+    example: '2025-02-27T09:00:00.000Z',
+  },
   getSlotsResponse: {
     status: 200,
     description: 'Fetched slots',

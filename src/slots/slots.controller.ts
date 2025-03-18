@@ -41,7 +41,7 @@ export class SlotsController {
   }
 
   @ApiBearerAuth()
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Post('/bulk')
   @Serialize(BulkSlotsDto)
   @ApiCreatedResponse(docs.createSlotsBulkResponse)
@@ -67,11 +67,11 @@ export class SlotsController {
     }
   }
 
+  @Serialize(SlotDto)
   @Get('/date')
-  @ApiQuery(docs.getSlotsRequest)
+  @ApiQuery(docs.getSlotsOneDayRequest)
   @ApiResponse(docs.getSlotsResponse)
   getSlotsOneDay(@Query('date') date: string) {
-    // console.log('Hi', date);
     if (date) {
       return this.slotsService.getByOneDate(date);
     }
