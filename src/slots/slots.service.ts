@@ -6,7 +6,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Slot } from './slot.entity';
-import { LessThan, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  LessThan,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { createSlotDto } from './dtos/create-slot.dto';
 import { RentalsService } from 'src/rentals/rentals.service';
 
@@ -141,6 +147,23 @@ export class SlotsService {
     return this.repo.find({
       where: {
         start_datetime: MoreThanOrEqual(new Date(date)),
+        is_active: true,
+      },
+    });
+  }
+
+  async getByOneDate(date: string) {
+    if (!date || isNaN(Date.parse(date))) {
+      throw new BadRequestException('Invalid date format');
+    }
+    const startDate = new Date(date);
+    startDate.setUTCHours(0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setUTCDate(endDate.getUTCDate() + 1);
+
+    return this.repo.find({
+      where: {
+        start_datetime: Between(startDate, endDate),
         is_active: true,
       },
     });
