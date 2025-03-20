@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { RentalsService } from './rentals.service';
 import { createRentalDto } from './dtos/create-rental.dto';
@@ -16,6 +17,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { docs } from 'src/docs';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('rentals')
 export class RentalsController {
@@ -37,6 +39,7 @@ export class RentalsController {
 
   @ApiBearerAuth()
   @ApiCreatedResponse(docs.rental)
+  @UseGuards(AuthGuard)
   @Post()
   createSlot(@Body() body: createRentalDto) {
     return this.rentalsService.create(body);
@@ -44,6 +47,7 @@ export class RentalsController {
 
   @ApiBearerAuth()
   @ApiResponse(docs.rental)
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   updateRental(@Param('id') id: string, @Body() body: updateRentalDto) {
     return this.rentalsService.updateRental(Number(id), body);
@@ -51,6 +55,7 @@ export class RentalsController {
 
   @ApiBearerAuth()
   @ApiResponse(docs.rental)
+  @UseGuards(AuthGuard)
   @Delete('/:id')
   deleteRental(@Param('id') id: string) {
     return this.rentalsService.remove(Number(id));
