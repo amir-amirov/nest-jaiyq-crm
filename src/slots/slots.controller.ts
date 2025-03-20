@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { SlotsService } from './slots.service';
@@ -68,12 +69,39 @@ export class SlotsController {
   }
 
   @Serialize(SlotDto)
+  @UseGuards(AuthGuard)
+  @Get('/admin')
+  @ApiQuery(docs.getSlotsRequest)
+  @ApiResponse(docs.getSlotsResponse)
+  getSlotsAdmin(
+    @Query('start_date') start_date: string,
+    @Request() request: any,
+  ) {
+    if (start_date) {
+      return this.slotsService.getByStartDate(start_date, request.user.id);
+    } else {
+      return this.slotsService.getAll(request.user.id);
+    }
+  }
+
+  @Serialize(SlotDto)
   @Get('/date')
   @ApiQuery(docs.getSlotsOneDayRequest)
   @ApiResponse(docs.getSlotsResponse)
   getSlotsOneDay(@Query('date') date: string) {
     if (date) {
       return this.slotsService.getByOneDate(date);
+    }
+  }
+
+  @Serialize(SlotDto)
+  @UseGuards(AuthGuard)
+  @Get('/date/admin')
+  @ApiQuery(docs.getSlotsOneDayRequest)
+  @ApiResponse(docs.getSlotsResponse)
+  getSlotsOneDayAdmin(@Query('date') date: string, @Request() request: any) {
+    if (date) {
+      return this.slotsService.getByOneDate(date, request.user.id);
     }
   }
 

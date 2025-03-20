@@ -24,6 +24,18 @@ export class SlotsService {
   ) {}
 
   async create(slotDto: createSlotDto) {
+    const rental = await this.rentalsService.findOneRental(slotDto.rental_id);
+    const durationMs = rental.duration_minutes * 60 * 1000;
+
+    const slotDurationMs =
+      new Date(slotDto.end_datetime).getTime() -
+      new Date(slotDto.start_datetime).getTime();
+    if (slotDurationMs !== durationMs) {
+      throw new BadRequestException(
+        `Slot duration must be exactly ${rental.duration_minutes} minutes`,
+      );
+    }
+
     await this.isSlotValid(
       new Date(slotDto.start_datetime),
       new Date(slotDto.end_datetime),
@@ -33,7 +45,6 @@ export class SlotsService {
       new Date(slotDto.start_datetime),
       slotDto.rental_id,
     );
-    const rental = await this.rentalsService.findOneRental(slotDto.rental_id);
     const newSlot = this.repo.create({
       ...slotDto,
       start_datetime: new Date(slotDto.start_datetime),
@@ -93,7 +104,7 @@ export class SlotsService {
   // }
 
   async findOne(id: number) {
-    const slot = await this.repo.findOneBy({ id, is_active: true });
+    const slot = await this.repo.findOneBy({ id });
     if (!slot) {
       throw new NotFoundException(`slot with id ${id} not found`);
     }
@@ -135,7 +146,10 @@ export class SlotsService {
     return this.repo.save(slot);
   }
 
-  async getAll() {
+  async getAll(id?: number) {
+    if (id) {
+      return this.repo.find();
+    }
     return this.repo.find({
       where: {
         is_active: true,
@@ -143,7 +157,14 @@ export class SlotsService {
     });
   }
 
-  async getByStartDate(date: string) {
+  async getByStartDate(date: string, id?: number) {
+    if (id) {
+      return this.repo.find({
+        where: {
+          start_datetime: MoreThanOrEqual(new Date(date)),
+        },
+      });
+    }
     return this.repo.find({
       where: {
         start_datetime: MoreThanOrEqual(new Date(date)),
@@ -152,7 +173,7 @@ export class SlotsService {
     });
   }
 
-  async getByOneDate(date: string) {
+  async getByOneDate(date: string, id?: number) {
     if (!date || isNaN(Date.parse(date))) {
       throw new BadRequestException('Invalid date format');
     }
@@ -161,6 +182,13 @@ export class SlotsService {
     const endDate = new Date(startDate);
     endDate.setUTCDate(endDate.getUTCDate() + 1);
 
+    if (id) {
+      return this.repo.find({
+        where: {
+          start_datetime: Between(startDate, endDate),
+        },
+      });
+    }
     return this.repo.find({
       where: {
         start_datetime: Between(startDate, endDate),

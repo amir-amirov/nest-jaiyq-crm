@@ -15,4 +15,7 @@ export class createRentalDto {
   })
   @IsNumber()
   price: number;
+
+  @IsNumber()
+  duration_minutes: number;
 }

@@ -23,6 +23,9 @@ export class Rental {
   @Column()
   price: number;
 
+  @Column()
+  duration_minutes: number;
+
   @CreateDateColumn()
   created_at: Date; // Auto-generated creation timestamp
 

@@ -69,11 +69,11 @@ export class AuthService {
     };
     const token = await this.jwtService.signAsync(payload, {
       secret: 't8V3$kL9!pQ2@zR5#mX7&wY4^bN6*vA1',
-      expiresIn: '1d',
+      expiresIn: '365d',
     });
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: 't8V3$kL9!pQ2@zR5#mX7&wY4^bN6*vA1',
-      expiresIn: '7d',
+      expiresIn: '365d',
     });
 
     const userWithToken = {

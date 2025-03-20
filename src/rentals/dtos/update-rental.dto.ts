@@ -17,4 +17,8 @@ export class updateRentalDto {
   @IsNumber()
   @IsOptional()
   price: number;
+
+  @IsNumber()
+  @IsOptional()
+  duration_minutes: number;
 }
